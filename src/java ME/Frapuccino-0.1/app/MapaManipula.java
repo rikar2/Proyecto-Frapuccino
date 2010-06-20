@@ -14,9 +14,12 @@ class MapaManipula
     public MapaManipula(String[] coordenadas) 
     {    
      this.coordenadas = coordenadas;
-     mapa = new Mapa(this.coordenadas);
     }
     
+    public void nuevoMapa()
+    {
+      mapa = new Mapa(this.coordenadas);  
+    }
     
     public void cambiarTipoMapa(String tipoMapa)
     {    

@@ -23,11 +23,13 @@ class TrazadoDosLugares extends MainScreen
  
 public void run() {
        
-  boolean flag = true;
-  String lugar = "";
-  String lugar2 = "";
-    
+  boolean flag;
+  String lugar;
+  String lugar2;
+  flag = true;
+  
        do {
+           
             String[] selections = {"Buscar","Cancelar"};            
             Dialog addDialog = new Dialog("¿Como llegar? ", selections, null, 0, null);           
             EditField inputField = new EditField("Desde : ","");
@@ -50,7 +52,7 @@ public void run() {
                 flag = false;
             }
             
-        } while ( flag );
+        } while (flag);
  }
 
 } 

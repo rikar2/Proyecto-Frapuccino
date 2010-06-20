@@ -5,29 +5,59 @@
  * Confidential and proprietary.
  */
 
-import net.rim.device.api.ui.*;
 import net.rim.device.api.ui.component.*;
-import net.rim.device.api.ui.container.*;
-import net.rim.device.api.system.*;
+import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.container.MainScreen;
 
-
-class UbicacionUsuario extends MainScreen  
+class UbicacionUsuario extends MainScreen
 {
- private CoordenadasGPS coord = new CoordenadasGPS();
- private String latitud = "";
- private String longitud = "";
- private String altitud = "";
- private Mapa mapa;
+ private ProgressBar pro;
+ private BuscarCoordenadas busc;
+ 
+ public UbicacionUsuario(CoordenadasGPS coord)
+ {
   
- public UbicacionUsuario()
- {    
-  LabelField title = new LabelField("Frapuccino v1.0 Mi ubicación", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
-  setTitle(title);
-  this.latitud = coord.getLatitud()+"";
-  this.longitud = coord.getLongitud()+"";
-  System.out.println(this.latitud);
-  System.out.println(this.longitud);
-  mapa = new Mapa(latitud, longitud);
-    
+   LabelField title = new LabelField("Frapuccino v1.0 Mi ubicación", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
+   setTitle(title);
+   pro = new ProgressBar("Buscando satélites. Espere...", 100, 100);
+   pro.start();
+   busc = new BuscarCoordenadas(coord, pro);
+   busc.start(); 
  }
-} 
+  
+}
+
+class BuscarCoordenadas extends Thread
+{
+  private String[] coordenadas = {"", "", "", ""};
+  private Mapa mapa;
+  private boolean flag = true;
+  private CoordenadasGPS coord;
+  private ProgressBar pro;
+ 
+    public BuscarCoordenadas(CoordenadasGPS coord, ProgressBar pro)
+    {
+      this.coord = coord;
+      this.pro = pro;  
+    }
+    
+    public void run()
+    {
+         do {
+            if(!(coord.getLatitud() == 0.0 && coord.getLongitud() == 0.0))
+            {  
+             // pro.setIncremento(100)
+             pro.detenerElHilo();
+             coordenadas[0] = coord.getLatitud()+"";
+             coordenadas[1] = coord.getLongitud()+"";
+             flag = false; 
+             mapa = new Mapa(coordenadas);
+             mapa.mostrarMapa();          
+            }
+        } while ( flag );
+        
+     this.flag = true;
+    }
+    
+}
+

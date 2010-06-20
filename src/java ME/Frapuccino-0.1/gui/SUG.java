@@ -12,11 +12,15 @@ import net.rim.device.api.system.*;
 
 class SUG extends MainScreen
 {
+ private CoordenadasGPS coord;
+ private UbicacionUsuario ubic;
+ 
  public SUG()
  {
    LabelField title = new LabelField("Frapuccino v1.0 Geográfica", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);     
    setTitle(title);
-     
+   coord = new CoordenadasGPS();
+   coord.start();
  }
  
  private MenuItem buscar = new MenuItem("Búsqueda en el mapa", 1, 2) 
@@ -33,9 +37,11 @@ class SUG extends MainScreen
  {
     public void run() 
     {
-      UiApplication.getUiApplication().pushScreen(new UbicacionUsuario());   
-      UiApplication uiapp = UiApplication.getUiApplication();
-      uiapp.popScreen(uiapp.getActiveScreen());     
+     UiApplication uiapp = UiApplication.getUiApplication();
+     uiapp.popScreen(uiapp.getActiveScreen());  
+     UiApplication.getUiApplication().pushScreen(new UbicacionUsuario(coord));
+     //ubic = new UbicacionUsuario(coord);
+   
     }
  };
  

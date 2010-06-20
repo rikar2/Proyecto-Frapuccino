@@ -4,7 +4,7 @@
  * © <your company here>, 2003-2008
  * Confidential and proprietary.
  */
-
+    
 import net.rim.device.api.ui.*;
 import net.rim.device.api.ui.component.*;
 import net.rim.device.api.ui.container.*;
@@ -18,14 +18,16 @@ class MapaUI extends MainScreen
  private String tipoMapa = "";
  private String[] coordenadas = {"", "", "", ""};
  private MapaManipula mapam;
-  
+ private MapaTransf mapatransf;
+ 
   public MapaUI(byte[] buffer, String[] coordenadas, String tipoMapa, int zoom)
   {
+  
    this.zoom = zoom;
    this.tipoMapa = tipoMapa;
    this.coordenadas = coordenadas;
    mapam = new MapaManipula(this.coordenadas);
-   
+
    LabelField title = new LabelField("Frapuccino v1.0 Mapa", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
    setTitle(title);
    imagen = null;
@@ -48,7 +50,8 @@ class MapaUI extends MainScreen
     public void run() 
     {
      UiApplication uiapp = UiApplication.getUiApplication();
-     uiapp.popScreen(uiapp.getActiveScreen()); 
+     uiapp.popScreen(uiapp.getActiveScreen());
+     mapam.nuevoMapa(); 
      mapam.mantenerNivelZoom(zoom);    
      mapam.cambiarTipoMapa(tipoMapa);
     }
@@ -59,7 +62,8 @@ class MapaUI extends MainScreen
     public void run() 
     {
      UiApplication uiapp = UiApplication.getUiApplication();
-     uiapp.popScreen(uiapp.getActiveScreen()); 
+     uiapp.popScreen(uiapp.getActiveScreen());
+     mapam.nuevoMapa(); 
      mapam.mantenerNivelZoom(zoom); 
      mapam.cambiarTipoMapa(tipoMapa);
     }
@@ -71,6 +75,7 @@ class MapaUI extends MainScreen
     {
      UiApplication uiapp = UiApplication.getUiApplication();
      uiapp.popScreen(uiapp.getActiveScreen());
+     mapam.nuevoMapa();
      mapam.mantenerTipoMapa(tipoMapa);  
      mapam.acercarMapa(zoom);
     }
@@ -82,6 +87,7 @@ class MapaUI extends MainScreen
     {
      UiApplication uiapp = UiApplication.getUiApplication();
      uiapp.popScreen(uiapp.getActiveScreen());
+     mapam.nuevoMapa();
      mapam.mantenerTipoMapa(tipoMapa);    
      mapam.alejarMapa(zoom);
     }
@@ -91,7 +97,34 @@ class MapaUI extends MainScreen
  {
     public void run() 
     {
-    
+      boolean flag;
+        String lugar;
+        do {
+            flag = true;
+            String[] selections = {"Guardar","Cancelar"};            
+            Dialog addDialog = new Dialog("Guardar el mapa", selections, null, 0, null);           
+            EditField inputField = new EditField("Nombre : ","");            
+            addDialog.add(inputField);           
+            add(new SeparatorField());
+            
+            if(addDialog.doModal() == 0) // User selected "Add".
+            {
+                if(!(inputField.getText().equals("")))
+                {
+                   mapatransf = new MapaTransf();
+                   mapatransf.guardarMapa(imagen, inputField.getText().trim());
+                   UiApplication uiapp = UiApplication.getUiApplication();
+                   uiapp.popScreen(uiapp.getActiveScreen()); 
+                }
+            } 
+            else
+            {
+          
+                 flag = false;
+            }
+     
+        } while ( flag );  
+   
     }
  };
  
@@ -99,7 +132,7 @@ class MapaUI extends MainScreen
  {
     public void run() 
     {
-       
+       //en contrucción
     }
  };
  
@@ -107,7 +140,7 @@ class MapaUI extends MainScreen
  {
     public void run() 
     {
-     
+     //en contrucción
     }
  };
  
