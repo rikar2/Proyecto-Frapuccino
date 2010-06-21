@@ -11,7 +11,7 @@ import javax.microedition.io.*;
 import java.io.*;
 
 
-class Mapa 
+class Mapa
 {
  private String ired;
  private int zoom = 14;
@@ -57,7 +57,7 @@ class Mapa
     
     buffer = cons.getBuffer();
     pro.detenerElHilo();
-  
+ 
   
    UiApplication.getUiApplication().invokeLater(new Runnable(){ 
         public void run(){

@@ -5,104 +5,137 @@
  * Confidential and proprietary.
  */
 
+import net.rim.device.api.ui.UiApplication;
 import javax.microedition.io.*;
 import java.io.*;
 
 class ConversionCoordenadas 
 {
- private String ired = "";
- private String[] coordenadas = {"", "" , "", ""};  
- private InterfazRed interfazRed = new InterfazRed();
+ private String[] coordenadas = {"", "", "", ""};
+ private String[] lugares = {"", ""};
+ private ConseguirCoordenadas cons;  
+ private Mapa mapa;
  
  public ConversionCoordenadas(String lugar)
  {
-  this.ired = interfazRed.getInterfazRed();    
-  crearNombre(lugar);
-  Mapa mapa = new Mapa(coordenadas);
+  lugares[0] = lugar;
+  cons = new ConseguirCoordenadas();
+  crearNombre();
+  mapa = new Mapa(coordenadas);
   mapa.mostrarMapa();
  }
  
  public ConversionCoordenadas(String lugar, String lugar2)
- { 
-  this.ired = interfazRed.getInterfazRed();    
-  crearNombre(lugar, lugar2);
-  Mapa mapa = new Mapa(coordenadas);
+ {
+  lugares[0] = lugar;
+  lugares[1] = lugar2;
+  cons = new ConseguirCoordenadas(); 
+  crearNombre();
+  mapa = new Mapa(coordenadas);
   mapa.mostrarMapa();
  }
  
- private void crearNombre(String adress)
+ 
+ private void crearNombre()
  {  
+    String adress = "";
     String adress1 = "";
-    String text = "";
-    String cord = "";;
+    int x = 0;
     
-    for(int i = 0; i < adress.trim().length(); i++) {
-        if(adress.trim().charAt(i) == ' ')
-        {
-         adress1 += "%";
+    while(x < this.lugares.length)
+    {
+      adress = this.lugares[x];
+      
+        for(int i = 0; i < adress.trim().length(); i++) {
+            if(adress.trim().charAt(i) == ' ')
+            {
+             adress1 += "%";
+            }
+            else
+            {
+             adress1 += adress.trim().charAt(i);
+            }
         }
-        else
-        {
-         adress1 += adress.trim().charAt(i);
-        }
-           
+       this.lugares[x] = adress1;
+      x++;
+      adress1 = "";
+      adress = "";
     }
     
-    text = convertirCoordenadas(adress1);
-  //  System.out.println(adress1);
-    cord = crearLat(text);
-    separarCoord(cord);                    
-  }
-  
-  private void crearNombre(String adress, String adress2)
-  {
-      String adress1 = "";
-      String adress3 = "";
-      String text = "";
-      String cord = "";
-       
-           for(int i = 0; i < adress.trim().length(); i++) {
-                if(adress.trim().charAt(i) == ' ')
-                {
-                    adress1 += "%";
-                }
-                else
-                {
-                 adress1 += adress.trim().charAt(i);
-                }
-           
-           }
-           
-           for(int i = 0; i < adress2.trim().length(); i++) {
-                if(adress2.trim().charAt(i) == ' ')
-                {
-                    adress3 += "%";
-                }
-                else
-                {
-                 adress3 += adress2.trim().charAt(i);
-                }
-           
-            }
-              
-      text = convertirCoordenadas(adress1);
-      cord = crearLat(text);
-      separarCoord(cord);  
-      text = convertirCoordenadas(adress3);
-      cord = crearLat(text);
-      separarCoord2(cord);                    
-    } 
-   
-   
-      
-  private String convertirCoordenadas(String address)
-  {
-   HttpConnection conn = null;
-   InputStream input = null;
-   String text = "";
+    cons.setNombreLugar(lugares);
+    cons.start();
     
     try {
-        conn = (HttpConnection)Connector.open("http://maps.google.com/maps/geo?q="+address+"&output=csv&;interface="+this.ired);
+        cons.join();   
+    } catch (Exception e){}
+    
+    this.lugares = cons.getCoordenadas();
+    ordenarSepararCoordenadas();
+ }
+ 
+ 
+ private void ordenarSepararCoordenadas()
+ {
+   int x = 0;
+   int cont = 0;
+   int contadorComas = 0;
+   String coord = "";
+   
+     while(( x < this.lugares.length ) && !(this.lugares[x].equals("")))
+     {
+       coord = this.lugares[x];
+        for(int i = 0; i < coord.length() ; i++)
+        {   
+         if( contadorComas == 2 && coord.charAt(i) != ',' )
+         {
+           this.coordenadas[cont] += coord.charAt(i);         
+          }
+           else
+             if( contadorComas == 3 && coord.charAt(i) != ',' )
+             {
+               this.coordenadas[cont + 1] += coord.charAt(i);   
+             }      
+          
+           if(coord.charAt(i) == ',')
+           {
+            contadorComas++;
+            } 
+          }
+        
+       x++;
+       cont = x * 2;
+       coord = "";
+       contadorComas = 0;
+     }     
+ }
+}
+  
+  
+class ConseguirCoordenadas extends Thread
+{
+ private HttpConnection conn = null;
+ private InputStream input = null;
+ private String ired = "";
+ private String[] lugares = {"", ""};
+ private InterfazRed interfazRed = new InterfazRed();
+ 
+ public ConseguirCoordenadas()
+ {
+  this.ired = interfazRed.getInterfazRed();
+ }
+ 
+ public void run()
+ {
+  int x = 0; 
+   
+   while(( x < this.lugares.length ) && !(this.lugares[x].equals("")))
+   {
+    System.out.println("Entroo toito--> "+this.lugares[x]);
+    conn = null;
+    input = null;
+     
+     try {
+        conn = (HttpConnection)Connector.open("http://maps.google.com/maps/geo?q="+this.lugares[x]+"&output=csv&;interface="+this.ired);
         conn.setRequestMethod(HttpConnection.POST);
         input = conn.openInputStream();
      
@@ -115,98 +148,28 @@ class ConversionCoordenadas
             raw.append(new String(data, 0, len));
         }
     
-        text = raw.toString();
+        this.lugares[x] = raw.toString();
            
-    } catch (Exception e) {
+      } catch (Exception e) {
         
         
-    }
- //System.out.println(text);
- return text;
- }
-  
- private String crearLat(String dat) 
+      }
+     System.out.println("Entroo toito--> "+this.lugares[x]);
+    x++;
+   }    
+  x = 0;
+ }   
+
+ public void setNombreLugar(String[] lugares)
  {
-   int cont=0;
-   String coord = "";
-   
-   for(int i = 0; i < dat.length() ; i++)
-   {
-    try {
-        
-        if (cont == 2 || cont == 3)
-        {
-          coord += dat.charAt(i);  
-        }
-       
-         
-        if (dat.charAt(i) == ',')
-        {
-          cont++;
-        }     
-    
-     }   
-     catch (Exception e)
-     {
-        System.out.println("Error --> "+e.toString());
-     }
-   
-    }
- //System.out.println(coord);   
- return coord;   
+  this.lugares = lugares;
  }
  
- private void separarCoord(String coord)
+ public String[] getCoordenadas()
  {
-  boolean esLatitud = true;
-  
-  for(int i = 0; i < coord.length(); i++)
-  {
-    
-    if(coord.charAt(i) == ',')
-    {
-       esLatitud = false; 
-    }   
-  
-    if(esLatitud)
-    {
-     this.coordenadas[0] += coord.charAt(i);    
-    }
-    else
-    if(coord.charAt(i) != ',')
-    {
-     this.coordenadas[1] += coord.charAt(i);   
-    }
-        
-  
-    }      
- }
+  return this.lugares;  
+ } 
+}
+
+
  
-  private void separarCoord2(String coord)
- {
-  boolean esLatitud = true;
-  
-  for(int i = 0; i < coord.length(); i++)
-  {
-    
-    if(coord.charAt(i) == ',')
-    {
-       esLatitud = false; 
-    }   
-  
-    if(esLatitud)
-    {
-     this.coordenadas[2] += coord.charAt(i);    
-    }
-    else
-    if(coord.charAt(i) != ',')
-    {
-     this.coordenadas[3] += coord.charAt(i);   
-    }
-        
-  
-    }      
- }
- 
- 
-} 

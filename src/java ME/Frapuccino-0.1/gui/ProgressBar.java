@@ -78,7 +78,7 @@ public class ProgressBar extends Thread {
                                     UiApplication.getUiApplication().popScreen(popup);
                                 } catch (Exception e){
                                     
-                                    System.out.println("popScreen -->"+e);
+                                    
                                 }
                              
                              }

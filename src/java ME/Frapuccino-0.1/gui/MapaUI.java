@@ -19,10 +19,11 @@ class MapaUI extends MainScreen
  private String[] coordenadas = {"", "", "", ""};
  private MapaManipula mapam;
  private MapaTransf mapatransf;
+ private MapaUI mapaUI;
  
   public MapaUI(byte[] buffer, String[] coordenadas, String tipoMapa, int zoom)
   {
-  
+   this.mapaUI = this;
    this.zoom = zoom;
    this.tipoMapa = tipoMapa;
    this.coordenadas = coordenadas;
@@ -51,6 +52,21 @@ class MapaUI extends MainScreen
     {
      UiApplication uiapp = UiApplication.getUiApplication();
      uiapp.popScreen(uiapp.getActiveScreen());
+     
+     UiApplication.getUiApplication().invokeLater(new Runnable() {
+                          public void run() {
+                             try {
+                               
+                               UiEngine eng = Ui.getUiEngine();
+                               eng.popScreen(mapaUI);   
+                               
+                            } catch (Exception e) {
+                                System.out.println("--->"+e);
+                            }
+                          }
+     });
+     
+     
      mapam.nuevoMapa(); 
      mapam.mantenerNivelZoom(zoom);    
      mapam.cambiarTipoMapa(tipoMapa);

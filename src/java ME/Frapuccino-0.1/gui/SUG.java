@@ -26,10 +26,10 @@ class SUG extends MainScreen
  private MenuItem buscar = new MenuItem("Búsqueda en el mapa", 1, 2) 
  {
     public void run() 
-    {  
-      UiApplication.getUiApplication().pushScreen(new Busqueda());   
+    {    
       UiApplication uiapp = UiApplication.getUiApplication();
       uiapp.popScreen(uiapp.getActiveScreen());
+      UiApplication.getUiApplication().pushScreen(new Busqueda()); 
     }
  };
  
