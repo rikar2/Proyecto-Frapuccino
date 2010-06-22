@@ -1,0 +1,27 @@
+<loader version="1.0">
+	<application id="Frapuccino">
+		<name>
+			Frapuccino.
+		</name>
+		<description>
+			Aplicación turistica.
+		</description>
+		<version>
+			1.0.0.
+		</version>
+		<vendor>
+			Ricardo Cortés Farias ricardo.cortes@masterdg.cl
+		</vendor>
+		<copyright>
+			Distributed under the GPL License.
+		</copyright>
+		<fileset Java="1.5">
+			<directory>
+
+			</directory>
+			<files>
+				Frapuccino.cod
+			</files>
+		</fileset>
+	</application>
+</loader>
