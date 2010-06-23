@@ -10,16 +10,24 @@ import net.rim.device.api.ui.component.*;
 import net.rim.device.api.ui.container.*;
 import net.rim.device.api.system.*;
 
+
+
 class MapaUI extends MainScreen 
 {
- private BitmapField field = new BitmapField();
- private EncodedImage imagen;
  private int zoom = 0;
  private String tipoMapa = "";
  private String[] coordenadas = {"", "", "", ""};
  private MapaManipula mapam;
  private MapaTransf mapatransf;
  private MapaUI mapaui;
+ private EncodedImage imagen;
+ private static final int HORZ_SCROLL_FACTOR = 8;
+ private static final int VERT_SCROLL_FACTOR  = 8;
+ Bitmap bitmap;
+ int left = 0;
+ int top = 0;
+ int maxLeft = 0;
+ int maxTop = 0;
 
  
   public MapaUI(byte[] buffer, String[] coordenadas, String tipoMapa, int zoom)
@@ -28,24 +36,29 @@ class MapaUI extends MainScreen
    this.zoom = zoom;
    this.tipoMapa = tipoMapa;
    this.coordenadas = coordenadas;
-
-   LabelField title = new LabelField("Frapuccino v1.0 Mapa", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
-   setTitle(title);
    imagen = null;
    
         try {
-            imagen = EncodedImage.createEncodedImage(buffer, 0, buffer.length);
-            this.field.setImage(this.imagen);
-             
+             imagen = EncodedImage.createEncodedImage(buffer, 0, buffer.length);
+             bitmap = imagen.getBitmap();
+            // BitmapField bitmapField = new BitmapField(imagen.getBitmap(), FIELD_HCENTER | FOCUSABLE);
         } catch (Exception e) {
              System.out.println("Error --> "+e.toString());
+        }
+        
+        if (bitmap.getWidth() > Graphics.getScreenWidth()) {
+                           maxLeft = bitmap.getWidth() - Graphics.getScreenWidth();
+        }
+                      
+        if (bitmap.getHeight() > Graphics.getScreenHeight()) {
+                         maxTop = bitmap.getHeight() - Graphics.getScreenHeight();
         }  
   
-    add(this.field);
-  
-  }
-  
- 
+     LabelField title = new LabelField("Frapuccino v1.0 Mapa", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);
+     setTitle(title);
+     //add(bitmapField);
+   }
+   
  
  private MenuItem TipoMapa = new MenuItem("Tipos de mapa", 1, 2) 
  {
@@ -163,6 +176,42 @@ class MapaUI extends MainScreen
   menu.add(volver);
   menu.add(salir);
   
- }     
+ }
+ 
+ 
+ protected void paint(Graphics graphics) 
+ {          
+   if (bitmap != null) 
+   {
+        graphics.drawBitmap(0, 0, Graphics.getScreenWidth(), Graphics.getScreenHeight(), bitmap, left, top);
+   }
+ }
+              
+ protected boolean navigationMovement(int dx, int dy, int status, int time) 
+ {  
+ 
+    left += (dx * HORZ_SCROLL_FACTOR);
+    top += (dy * VERT_SCROLL_FACTOR);
+    
+    if (left < 0) left = 0;
+        if (top < 0) top = 0;
+            if (left > maxLeft) left = maxLeft;
+                if (top > maxTop) top = maxTop;
+                       invalidate();
+
+  return true;
+ }
+}  
+ 
+ //////////// Para API 5.0.0   
+ /*
+ protected boolean navigationClick(int status, int time)
+        {
+            // Push a new ZoomScreen if track ball or screen is clicked
+            UiApplication.getUiApplication().pushScreen(new ZoomScreen(                           
+            return true;
+        }
   
-} 
+} */
+
+

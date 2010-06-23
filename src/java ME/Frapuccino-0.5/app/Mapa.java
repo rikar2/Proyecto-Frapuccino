@@ -92,12 +92,12 @@ class Mapa
 
     private String crearURL(String latitud, String longitud)
     {
-     return "http://maps.google.com/staticmap?center="+latitud+","+longitud+"&zoom="+zoom+"&size=512x512&maptype="+tipoMapa+"&markers="+latitud+","+longitud+",bluem|&key=MAPS_API_KEY&sensor=true_or_false;interface="+this.ired;      
+     return "http://maps.google.com/staticmap?center="+latitud+","+longitud+"&zoom="+zoom+"&size=640x640&maptype="+tipoMapa+"&markers="+latitud+","+longitud+",bluem|&key=MAPS_API_KEY&sensor=true_or_false;interface="+this.ired;      
     }
  
     private String crearURL2(String latitud, String longitud, String latitud2, String longitud2)
     {
-     return "http://maps.google.com/staticmap?&zoom="+zoom+"&size=512x512&maptype="+tipoMapa+"&markers="+latitud+","+longitud+",blueo|"+latitud2+","+longitud2+",yellowd&key=MAPS_API_KEY&sensor=true_or_false&path=rgba:0xff0000ff,weight:5|"+latitud+","+longitud+"|"+latitud2+","+longitud2+";interface="+this.ired;        
+     return "http://maps.google.com/staticmap?center="+latitud+","+longitud+"&zoom="+zoom+"&size=640x640&maptype="+tipoMapa+"&markers="+latitud+","+longitud+",greeno|"+latitud2+","+longitud2+",yellowd&key=MAPS_API_KEY&sensor=true_or_false&path=rgba:0xff0000ff,weight:5|"+latitud+","+longitud+"|"+latitud2+","+longitud2+";interface="+this.ired;        
     }
  
     public void setZoom(int zoom)
