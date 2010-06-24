@@ -33,7 +33,7 @@ class TrazadoDosLugaresIngresar extends Thread
  private EditField inputField;
  private EditField inputField2;
  private ConversionCoordenadas conv;
- private ButtonField buscar = new ButtonField("Buscar  ");
+ private ButtonField buscar = new ButtonField("Buscar");
  private ButtonField cancelar = new ButtonField("Cancelar");
   
   public TrazadoDosLugaresIngresar()

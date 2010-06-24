@@ -33,7 +33,7 @@ class BusquedaIngreso extends Thread
  private PopupScreen popup;
  private EditField inputField;
  private ConversionCoordenadas conv;
- private ButtonField buscar = new ButtonField("Buscar  ");
+ private ButtonField buscar = new ButtonField("Buscar");
  private ButtonField cancelar = new ButtonField("Cancelar");
 
  

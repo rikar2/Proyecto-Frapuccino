@@ -17,13 +17,13 @@ class SUG extends MainScreen
  
  public SUG()
  {
-   LabelField title = new LabelField("Frapuccino v1.0 Geográfica", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);     
+   LabelField title = new LabelField("Frapuccino 0.5 Geográfica", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);     
    setTitle(title);
    coord = new CoordenadasGPS();
    coord.start();
  }
  
- private MenuItem buscar = new MenuItem("Búsqueda en el mapa", 1, 2) 
+ private MenuItem buscar = new MenuItem("Búsqueda", 1, 2) 
  {
   Busqueda busc;
     public void run() 

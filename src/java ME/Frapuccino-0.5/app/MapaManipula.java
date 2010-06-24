@@ -132,8 +132,6 @@ class MapaManipula extends Thread
                                     
                                     
                    }
-                             
-                 
                  }
             });
        }

@@ -27,7 +27,7 @@ class Mapa
  {
   this.coordenadas = coordenadas; 
   ired = interfazRed.getInterfazRed();
-  pro = new ProgressBar("Consiguiendo el mapa. ", 100, 100);
+  pro = new ProgressBar("Consiguiendo el mapa", 100, 100);
   pro.start();  
  }
  
@@ -97,7 +97,8 @@ class Mapa
  
     private String crearURL2(String latitud, String longitud, String latitud2, String longitud2)
     {
-     return "http://maps.google.com/staticmap?center="+latitud+","+longitud+"&zoom="+zoom+"&size=640x640&maptype="+tipoMapa+"&markers="+latitud+","+longitud+",greeno|"+latitud2+","+longitud2+",yellowd&key=MAPS_API_KEY&sensor=true_or_false&path=rgba:0xff0000ff,weight:5|"+latitud+","+longitud+"|"+latitud2+","+longitud2+";interface="+this.ired;        
+     //return "http://maps.google.com/staticmap?center="+latitud+","+longitud+"&zoom="+zoom+"&size=640x640&maptype="+tipoMapa+"&markers="+latitud+","+longitud+",greeno|"+latitud2+","+longitud2+",yellowd&key=MAPS_API_KEY&sensor=true_or_false&path=rgba:0xff0000ff,weight:5|"+latitud+","+longitud+"|"+latitud2+","+longitud2+";interface="+this.ired;        
+     return "http://maps.google.com/staticmap?size=640x640&maptype="+tipoMapa+"&markers="+latitud+","+longitud+",greeno|"+latitud2+","+longitud2+",yellowd&key=MAPS_API_KEY&sensor=true_or_false&path=rgba:0xff0000ff,weight:5|"+latitud+","+longitud+"|"+latitud2+","+longitud2+";interface="+this.ired;        
     }
  
     public void setZoom(int zoom)

@@ -19,7 +19,7 @@ class SUGC extends MainScreen implements FieldChangeListener
  public SUGC()
  {
    super();   
-   LabelField title = new LabelField("Frapuccino v1.0", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);  
+   LabelField title = new LabelField("Frapuccino 0.5", LabelField.ELLIPSIS | LabelField.USE_ALL_WIDTH);  
    setTitle(title);
    add(geografic);
    add(comercial);
